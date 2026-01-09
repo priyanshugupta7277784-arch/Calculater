@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    background:#000;
+    color:#fff;
+    font-family:system-ui;
+}
+.top{
+    display:flex;
+    justify-content:space-around;
+    background:#111;
+    padding:10px 0;
+}
+.top button{
+    background:none;
+    border:none;
+    color:#777;
+    font-size:14px;
+}
+.top button.active{
+    color:#ff9500;
+    border-bottom:2px solid #ff9500;
+    padding-bottom:5px;
+}
+.page{display:none;padding:15px}
+.page.active{display:block}
+
+.display{
+    font-size:2.6em;
+    text-align:right;
+    padding:20px;
+    background:#000;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+.btn{
+    height:65px;
+    border-radius:50%;
+    border:none;
+    font-size:1.2em;
+}
+.num{background:#1c1c1c;color:#fff}
+.func{background:#a5a5a5;color:#000}
+.op{background:#ff9500;color:#fff}
+.zero{grid-column:span 2;border-radius:40px}
+.btn:active{transform:scale(0.92)}
+
+input,select{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    background:#1c1c1c;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+}
+.result{
+    font-size:18px;
+    margin-top:10px;
+    color:#ff9500;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top">
+<button class="active" onclick="tab(0)">Calc</button>
+<button onclick="tab(1)">BMI</button>
+<button onclick="tab(2)">Length</button>
+<button onclick="tab(3)">Weight</button>
+<button onclick="tab(4)">Temp</button>
+<button onclick="tab(5)">More</button>
+</div>
+
+<!-- CALCULATOR -->
+<div class="page active">
+<div class="display" id="d">0</div>
+<div class="grid">
+<button class="btn func" onclick="clr()">AC</button>
+<button class="btn func" onclick="del()">⌫</button>
+<button class="btn func" onclick="per()">%</button>
+<button class="btn op" onclick="add('/')">÷</button>
+
+<button class="btn func" onclick="add('Math.sin(')">sin</button>
+<button class="btn func" onclick="add('Math.cos(')">cos</button>
+<button class="btn func" onclick="add('Math.tan(')">tan</button>
+<button class="btn op" onclick="add('*')">×</button>
+
+<button class="btn num" onclick="add('7')">7</button>
+<button class="btn num" onclick="add('8')">8</button>
+<button class="btn num" onclick="add('9')">9</button>
+<button class="btn op" onclick="add('-')">−</button>
+
+<button class="btn num" onclick="add('4')">4</button>
+<button class="btn num" onclick="add('5')">5</button>
+<button class="btn num" onclick="add('6')">6</button>
+<button class="btn op" onclick="add('+')">+</button>
+
+<button class="btn num" onclick="add('1')">1</button>
+<button class="btn num" onclick="add('2')">2</button>
+<button class="btn num" onclick="add('3')">3</button>
+<button class="btn op" onclick="cal()">=</button>
+
+<button class="btn num zero" onclick="add('0')">0</button>
+<button class="btn num" onclick="add('.')">.</button>
+</div>
+</div>
+
+<!-- BMI -->
+<div class="page">
+<h3>BMI Calculator</h3>
+<input id="bh" placeholder="Height (cm)">
+<input id="bw" placeholder="Weight (kg)">
+<button class="btn op" onclick="bmi()">Calculate</button>
+<div class="result" id="bres"></div>
+</div>
+
+<!-- LENGTH -->
+<div class="page">
+<h3>Length Converter</h3>
+<input id="lm" placeholder="Meters">
+<button class="btn op" onclick="len()">Convert</button>
+<div class="result" id="lres"></div>
+</div>
+
+<!-- WEIGHT -->
+<div class="page">
+<h3>Weight Converter</h3>
+<input id="kg" placeholder="Kilograms">
+<button class="btn op" onclick="wei()">Convert</button>
+<div class="result" id="wres"></div>
+</div>
+
+<!-- TEMP -->
+<div class="page">
+<h3>Temperature</h3>
+<input id="c" placeholder="Celsius">
+<button class="btn op" onclick="temp()">Convert</button>
+<div class="result" id="tres"></div>
+</div>
+
+<!-- MORE -->
+<div class="page">
+<h3>More Converters</h3>
+<input id="sp" placeholder="Speed km/h">
+<button class="btn op" onclick="spd()">Convert</button>
+<div class="result" id="sres"></div>
+
+<input id="ar" placeholder="Area (sq meter)">
+<button class="btn op" onclick="area()">Convert</button>
+<div class="result" id="ares"></div>
+
+<input id="rs" placeholder="INR">
+<button class="btn op" onclick="cur()">Currency</button>
+<div class="result" id="cres"></div>
+</div>
+
+<script>
+let d=document.getElementById("d");
+
+function add(v){if(d.innerText=="0")d.innerText="";d.innerText+=v}
+function clr(){d.innerText="0"}
+function del(){d.innerText=d.innerText.slice(0,-1)||"0"}
+function cal(){try{d.innerText=eval(d.innerText)}catch{d.innerText="Error"}}
+function per(){d.innerText=d.innerText/100}
+
+function tab(i){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.querySelectorAll(".top button").forEach(b=>b.classList.remove("active"));
+document.querySelectorAll(".page")[i].classList.add("active");
+document.querySelectorAll(".top button")[i].classList.add("active");
+}
+
+function bmi(){
+let h=bh.value/100,w=bw.value;
+bres.innerText="BMI: "+(w/(h*h)).toFixed(2);
+}
+function len(){lres.innerText=lm.value*100+" cm | "+(lm.value*3.28).toFixed(2)+" ft";}
+function wei(){wres.innerText=kg.value*1000+" g | "+(kg.value*2.2).toFixed(2)+" lb";}
+function temp(){tres.innerText=(c.value*9/5+32)+" °F";}
+function spd(){sres.innerText=(sp.value/3.6).toFixed(2)+" m/s";}
+function area(){ares.innerText=(ar.value*10.76).toFixed(2)+" sq ft";}
+function cur(){cres.innerText="$ "+(rs.value/83).toFixed(2);}
+</script>
+
+</body>
+</html>
